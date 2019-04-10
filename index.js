@@ -2,7 +2,7 @@
 const fetch = require("node-fetch");
 const yaml = require("js-yaml");
 const cheerio = require("cheerio");
-const colors = require("colors");
+const chalk = require("chalk");
 
 async function run() {
   // Grab down sites.yml
@@ -37,8 +37,9 @@ async function run() {
       siteHtml = await fetch(siteUrl).then(resp => resp.text());
     } catch (err) {
       console.log(
-        `[Err]: ${site.title} (${siteUrl}) ran into an error: ${err.message}`
-          .red
+        `${chalk.red(`[Err]`)}: ${site.title} (${siteUrl}) ran into an error: ${
+          err.message
+        }`
       );
       sitesVisited++;
       erroredOut++;
@@ -57,7 +58,9 @@ async function run() {
     } else {
       // The site is not a gatsby site, print out some info
       console.log(
-        `[Notice]: ${site.title} (${siteUrl}) is not a Gatsby site`.yellow
+        `${chalk.yellow(`[Notice]`)}: ${
+          site.title
+        } (${siteUrl}) is not a Gatsby site`
       );
       sitesVisited++;
       nonGatsbySiteCount++;
@@ -65,9 +68,13 @@ async function run() {
   }
 
   console.log(
-    `We visited ${sitesVisited}/${totalSitesCount} sites. Out of them, ${nonGatsbySiteCount} sites were not a Gatsby site and ${erroredOut} errored out when visiting it.`
-      .green
+    chalk.green(
+      `We visited ${sitesVisited}/${totalSitesCount} sites. Out of them, ${nonGatsbySiteCount} sites were not a Gatsby site and ${erroredOut} errored out when visiting it.`
+    )
   );
+
+  // If there are any non Gatsby sites, fail (non-zero exit code)
+  process.exit(nonGatsbySiteCount > 0 ? 1 : 0);
 }
 
 run();
