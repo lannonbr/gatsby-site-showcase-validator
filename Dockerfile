@@ -1,6 +1,6 @@
 FROM node:10-alpine
 
-LABEL version="1.0.0"
+LABEL version="1.0.1"
 LABEL repository="https://github.com/lannonbr/gatsby-site-showcase-validator"
 LABEL maintainer="Benjamin Lannon <benjamin@lannonbr.com>"
 
@@ -16,4 +16,4 @@ COPY . /
 
 RUN yarn
 
-ENTRYPOINT [ "node", "/index.js" ]
+CMD [ "node", "/index.js" ]
